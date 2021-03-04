@@ -1,10 +1,15 @@
+require('dotenv').config();
 const fs = require('fs');
 const Discord = require('discord.js');
-const { prefix, token } = require('./config.json');
 
+// Creating a bot instance
 const client = new Discord.Client();
+// Creating a struture for bot commands
 client.commands = new Discord.Collection();
+// Setting a prefix
+const prefix = process.env.PREFIX;
 
+// Taking all the directory's folders
 const commandFolders = fs.readdirSync('./commands');
 
 for (const folder of commandFolders) {
@@ -15,6 +20,7 @@ for (const folder of commandFolders) {
     }
 }
 
+// Taking all the folder's files
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
@@ -22,31 +28,39 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
+// Display a message if bot when bot is running
 client.once('ready', () => {
-    console.log('Ready!');
+    console.log('RUNNING!!!!!!!');
 });
 
-client.login(token);
+// Loggin on Discord
+client.login(process.env.BOT_TOKEN);
 
+// Setting up the bot to listen every message
 client.on('message', message => {
+    // Verifying if the message is a command
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
+    // Taking only the command, without the args
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
 
-    if (!client.commands.has(commandName)) return;
+    // Verifying if the command exists
+    if (!client.commands.has(commandName)) return message.reply('Esse comando não existe!');
 
+    // Calling the typed command
     const command = client.commands.get(commandName);
 
+    // Veryfing if args were given
     if (command.args && !args.length) {
         return message.channel.send(`Você não forneceu nenhum argumento, ${message.author}`);
     }
 
+    // Executing the command
     try {
         command.execute(message, args);
     } catch (error) {
         console.error(error);
         message.reply('Houve um erro executar esse comando.');
     }
-
 });

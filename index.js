@@ -37,7 +37,7 @@ client.once('ready', () => {
 client.login(process.env.BOT_TOKEN);
 
 // Setting up the bot to listen every message
-client.on('message', message => {
+client.on('message', async message => {
     // Verifying if the message is a command
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 

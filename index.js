@@ -40,7 +40,7 @@ client.once('ready', () => {
 client.login(token);
 
 // Setting up the PORT
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 // Setting up the bot to listen every message
 client.on('message', async message => {
     // Verifying if the message is a command

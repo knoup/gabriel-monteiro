@@ -33,11 +33,6 @@ for (const file of commandFiles) {
 
 // Setting up the PORT
 const port = process.env.PORT || 5000;
-const host = '0.0.0.0';
-
-client.listen(port, host, function() {
-    console.log(`USING THE PORT ${port}`);
-});
 
 // Display a message if bot when bot is running
 client.once('ready', () => {

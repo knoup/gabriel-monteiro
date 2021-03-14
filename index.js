@@ -10,7 +10,7 @@ client.commands = new Discord.Collection();
 client.queues = new Map();
 // Setting a prefix
 const prefix = process.env.PREFIX;
-const BOT_TOKEN = process.env.BOT_TOKEN;
+const token = process.env.BOT_TOKEN;
 
 // Taking all the directory's folders
 const commandFolders = fs.readdirSync('./commands');
@@ -37,7 +37,7 @@ client.once('ready', () => {
 });
 
 // Loggin on Discord
-client.login(BOT_TOKEN);
+client.login(token);
 
 // Setting up the bot to listen every message
 client.on('message', async message => {

@@ -70,4 +70,4 @@ client.on('message', async message => {
     }
 
     // console.log(client.queues);
-}, port);
+}).listen(port);

@@ -31,6 +31,14 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
+// Setting up the PORT
+const port = process.env.PORT || 3000;
+const host = '0.0.0.0';
+
+client.listen(port, host, function() {
+    console.log(`USING THE PORT ${port}`);
+});
+
 // Display a message if bot when bot is running
 client.once('ready', () => {
     console.log('RUNNING!!!!!!!');
@@ -39,8 +47,7 @@ client.once('ready', () => {
 // Loggin on Discord
 client.login(token);
 
-// Setting up the PORT
-const port = process.env.PORT || 3000;
+
 // Setting up the bot to listen every message
 client.on('message', async message => {
     // Verifying if the message is a command
@@ -70,4 +77,4 @@ client.on('message', async message => {
     }
 
     // console.log(client.queues);
-}, port);
+});

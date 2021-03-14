@@ -27,7 +27,7 @@ const execute = async (client, message, args) => {
         if (queue) { // If a queue already exists
             queue.songs.push(songUrl); // push the new typed song on the queue
             client.queues.set(message.guild.id, queue);
-            let messageBanner = new MessageEmbed()
+            const messageBanner = new MessageEmbed()
                 .setAuthor('MÚSICA ADICIONADA À FILA! ✅', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
                 .setThumbnail(songThumb)
                 .setColor('GREEN')
@@ -38,7 +38,7 @@ const execute = async (client, message, args) => {
             return message.channel.send(messageBanner);
         } else {
             playSong(client, message, songUrl); // If not exists a queue, the playSong function is called
-            let messageBanner = new MessageEmbed()
+            const messageBanner = new MessageEmbed()
                 .setAuthor('TOCANDO AGORA! 🔊', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
                 .setThumbnail(songThumb)
                 .setColor('YELLOW')
@@ -56,7 +56,6 @@ const execute = async (client, message, args) => {
 const playSong = async (client, message, songUrl) => {
     let queue = client.queues.get(message.member.guild.id);
     if (!queue) {
-        console.log('ENTREEI NA LINHA 41!');
         const conn = await message.member.voice.channel.join();
         queue = {
             volume: 10,
@@ -70,7 +69,7 @@ const playSong = async (client, message, songUrl) => {
         queue.songs.shift(); // Removing the first elements from queue(array)
         if (queue.songs[0]) {
             playSong(client, message, queue.songs[0]); // Playing the first song from queue
-            let messageBanner = new MessageEmbed()
+            const messageBanner = new MessageEmbed()
                 .setAuthor('TOCANDO AGORA! 🔊', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
                 .setThumbnail(songThumb)
                 .setColor('BLUE')

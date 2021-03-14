@@ -1,1 +1,1 @@
-web:node index.js --port $PORT
+worker: node index.js

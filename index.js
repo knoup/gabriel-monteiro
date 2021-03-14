@@ -39,6 +39,8 @@ client.once('ready', () => {
 // Loggin on Discord
 client.login(token);
 
+// Setting up the PORT
+const port = process.env.PORT || 8080;
 // Setting up the bot to listen every message
 client.on('message', async message => {
     // Verifying if the message is a command
@@ -68,4 +70,4 @@ client.on('message', async message => {
     }
 
     // console.log(client.queues);
-});
+}, port);

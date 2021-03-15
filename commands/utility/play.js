@@ -4,7 +4,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 /* eslint-disable no-inner-declarations */
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, WebhookClient, DiscordAPIError, Discord, MessageCollector } = require('discord.js');
 const { search } = require('yt-search');
 const yts = require('yt-search');
 const ytdl = require('ytdl-core-discord');
@@ -13,6 +13,9 @@ const execute = async (client, message, args) => {
     try {
         // Verifying if the user is connected to a voice channel
         if (!message.member.voice.channel) return message.reply('você precisar estar em um canal do voz.');
+
+        //
+        // const botUser = new Discord.User();
 
         // Searching for URL on YouTube
         const songRequested = args.join(' '); // Taking the song's name/URL from command
@@ -27,7 +30,8 @@ const execute = async (client, message, args) => {
         if (queue) { // If a queue already exists
             queue.songs.push(songUrl); // push the new typed song on the queue
             client.queues.set(message.guild.id, queue);
-            const messageBanner = new MessageEmbed()
+            client.user.lastMessage.delete();
+            const songAdded = new MessageEmbed()
                 .setAuthor('MÚSICA ADICIONADA À FILA! ✅', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
                 .setThumbnail(songThumb)
                 .setColor('GREEN')
@@ -35,9 +39,12 @@ const execute = async (client, message, args) => {
                 .addField('Duração:', songDuration, true)
                 .addField('Pedida por:', message.member, true)
                 .setFooter(`${songViews} visualizações | ${songAgo}`);
-            return message.channel.send(messageBanner);
+            return message.channel.send(songAdded);
         } else {
+            if (client.user.lastMessage) client.user.lastMessage.delete();
             playSong(client, message, songUrl); // If not exists a queue, the playSong function is called
+            message.delete();
+            client.user.setActivity(`${songTitle}`, { type: 'LISTENING' });
             const messageBanner = new MessageEmbed()
                 .setAuthor('TOCANDO AGORA! 🔊', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
                 .setThumbnail(songThumb)
@@ -68,16 +75,24 @@ const playSong = async (client, message, songUrl) => {
     queue.dispatcher.on('finish', () => {
         queue.songs.shift(); // Removing the first elements from queue(array)
         if (queue.songs[0]) {
+            message.delete();
+            client.user.lastMessage.delete();
             playSong(client, message, queue.songs[0]); // Playing the first song from queue
-            const messageBanner = new MessageEmbed()
+            client.user.setActivity(`${songTitle}`, { type: 'LISTENING' });
+            const nowPlaying = new MessageEmbed()
                 .setAuthor('TOCANDO AGORA! 🔊', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
                 .setThumbnail(songThumb)
                 .setColor('BLUE')
                 .addField('Link:', queue.songs[0]);
-            return message.channel.send(messageBanner);
+            return message.channel.send(nowPlaying);
         } else {
+            client.user.lastMessage.delete();
             message.member.voice.channel.leave();
-            return client.queues.delete(message.member.guild.id); // As has no song on queue, it's deleted
+            const nothingPlaying = new MessageEmbed()
+                .setAuthor('FILA VAZIA! 🔇', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
+                .setColor('RED');
+            client.user.setActivity('a esquerda chorar.', { type: 'LISTENING' });
+            return message.channel.send(nothingPlaying), client.queues.delete(message.member.guild.id);
         }
     });
     client.queues.set(message.member.guild.id, queue);

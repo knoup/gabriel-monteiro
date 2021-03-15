@@ -2,12 +2,15 @@ require('dotenv').config();
 const fs = require('fs');
 const Discord = require('discord.js');
 
+
 // Creating a bot instance
 const client = new Discord.Client();
+
 // Creating a struture for bot commands
 client.commands = new Discord.Collection();
 // Creating a struture for Queue bot
 client.queues = new Map();
+
 // Setting a prefix
 const prefix = process.env.PREFIX;
 const token = process.env.BOT_TOKEN;

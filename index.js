@@ -33,7 +33,7 @@ for (const file of commandFiles) {
 
 // Display a message if bot when bot is running
 client.once('ready', () => {
-    console.log('RUNNING!!!!!!!');
+    console.log('THE BOT IS RUNNING!');
 });
 
 // Loggin on Discord

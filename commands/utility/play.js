@@ -64,7 +64,7 @@ const playSong = async (client, message, songUrl) => {
             songs: [songUrl],
         };
     }
-    queue.dispatcher = await queue.connection.play(await ytdl(songUrl), { highWaterMark: 1 << 25, type: 'opus' });
+    queue.dispatcher = await queue.connection.play(await ytdl(songUrl), { highWaterMark: 1 << 25, type: 'opus', filter: 'audioonly', quality: 'highestaudio' });
     queue.dispatcher.on('finish', () => {
         queue.songs.shift(); // Removing the first elements from queue(array)
         if (queue.songs[0]) {
@@ -76,6 +76,7 @@ const playSong = async (client, message, songUrl) => {
                 .addField('Link:', queue.songs[0]);
             return message.channel.send(messageBanner);
         } else {
+            message.member.voice.channel.leave();
             return client.queues.delete(message.member.guild.id); // As has no song on queue, it's deleted
         }
     });

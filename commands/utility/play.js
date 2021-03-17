@@ -62,7 +62,7 @@ const execute = async (client, message, args) => {
 
 const playSong = async (client, message, songUrl) => {
     let queue = client.queues.get(message.member.guild.id);
-    if (!queue) {
+    if (!queue) { // If has no queue, create one
         const conn = await message.member.voice.channel.join();
         queue = {
             volume: 10,
@@ -72,11 +72,11 @@ const playSong = async (client, message, songUrl) => {
         };
     }
     queue.dispatcher = await queue.connection.play(await ytdl(songUrl), { highWaterMark: 1 << 25, type: 'opus', filter: 'audioonly', quality: 'highestaudio' });
-    queue.dispatcher.on('finish', () => {
+    queue.dispatcher.on('finish', () => { // When the music is finish
         queue.songs.shift(); // Removing the first elements from queue(array)
-        if (queue.songs[0]) {
+        if (queue.songs[0]) { // Verifying if has song on queue
             message.delete();
-            client.user.lastMessage.delete();
+            client.user.lastMessage.delete(); // Deleting the last message from bot
             playSong(client, message, queue.songs[0]); // Playing the first song from queue
             client.user.setActivity(`${songTitle}`, { type: 'LISTENING' });
             const nowPlaying = new MessageEmbed()

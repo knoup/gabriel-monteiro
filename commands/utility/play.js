@@ -19,48 +19,53 @@ const execute = async (client, message, args) => {
 
         // Searching for URL on YouTube
         const songRequested = args.join(' '); // Taking the song's name/URL from command
-        let songUrl; // Creating a variable to receive the song's URL
+        // let songUrl; // Creating a variable to receive the song's URL
         const result = await yts(songRequested); // Searching for the song's name/URL
         const videos = result.videos.slice(0, 1); // Taking only the first video from response and adding into a array
-        videos.forEach(function(video) {
-            // message.reply(`${video.url}`); // Replying in chat the song's URL
-            return songUrl = video.url, songTitle = video.title, songThumb = video.image, songDuration = video.timestamp, songViews = video.views, songAgo = video.ago; // Assign the song's URL to a variable
-        });
+        const video = videos[0];
+        // videos.forEach(function(video) {
+        //     // message.reply(`${video.url}`); // Replying in chat the song's URL
+        //     return video;
+        //     // return songUrl = video.url, video.title = video.title, video.image = video.image, video.duration = video.timestamp, video.views = video.views, video.ago = video.ago; // Assign the song's URL to a variable
+        // });
         const queue = client.queues.get(message.guild.id);
         if (queue) { // If a queue already exists
-            queue.songs.push(songUrl); // push the new typed song on the queue
+            queue.songs.push(video); // push the new typed song on the queue
             client.queues.set(message.guild.id, queue);
             client.user.lastMessage.delete();
             const songAdded = new MessageEmbed()
                 .setAuthor('MÚSICA ADICIONADA À FILA! ✅', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
-                .setThumbnail(songThumb)
+                .setThumbnail(video.image)
                 .setColor('GREEN')
-                .addField('Nome:', songTitle)
-                .addField('Duração:', songDuration, true)
+                .addField('Nome:', video.title)
+                .addField('Duração:', video.duration, true)
                 .addField('Pedida por:', message.member, true)
-                .setFooter(`${songViews} visualizações | ${songAgo}`);
+                .setFooter(`${video.views} visualizações | ${video.ago}`);
             return message.channel.send(songAdded);
         } else {
-            if (client.user.lastMessage) client.user.lastMessage.delete();
-            playSong(client, message, songUrl); // If not exists a queue, the playSong function is called
-            message.delete();
-            client.user.setActivity(`${songTitle}`, { type: 'LISTENING' });
-            const messageBanner = new MessageEmbed()
-                .setAuthor('TOCANDO AGORA! 🔊', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
-                .setThumbnail(songThumb)
-                .setColor('YELLOW')
-                .addField('Nome:', songTitle)
-                .addField('Duração:', songDuration, true)
-                .addField('Pedida por:', message.member, true)
-                .setFooter(`${songViews} visualizações | ${songAgo}`);
-            return message.channel.send(messageBanner);
+            try {
+                if (client.user.lastMessage) client.user.lastMessage.delete();
+                playSong(client, message, video); // If not exists a queue, the playSong function is called
+                client.user.setActivity(`${video.title}`, { type: 'LISTENING' });
+                const messageBanner = new MessageEmbed()
+                    .setAuthor('TOCANDO AGORA! 🔊', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
+                    .setThumbnail(video.image)
+                    .setColor('YELLOW')
+                    .addField('Nome:', video.title)
+                    .addField('Duração:', video.duration, true)
+                    .addField('Pedida por:', message.member, true)
+                    .setFooter(`${video.views} visualizações | ${video.ago}`);
+                return message.channel.send(messageBanner);
+            } catch {
+                console.log('error!');
+            }
         }
     } catch (e) {
         console.log(e);
     }
 };
 
-const playSong = async (client, message, songUrl) => {
+const playSong = async (client, message, video) => {
     let queue = client.queues.get(message.member.guild.id);
     if (!queue) { // If has no queue, create one
         const conn = await message.member.voice.channel.join();
@@ -68,22 +73,25 @@ const playSong = async (client, message, songUrl) => {
             volume: 10,
             connection: conn,
             dispatcher: null,
-            songs: [songUrl],
+            songs: [video],
         };
     }
-    queue.dispatcher = await queue.connection.play(await ytdl(songUrl), { highWaterMark: 1 << 25, type: 'opus', filter: 'audioonly', quality: 'highestaudio' });
+    queue.dispatcher = await queue.connection.play(await ytdl(video.url), { highWaterMark: 1 << 25, type: 'opus', filter: 'audioonly', quality: 'highestaudio' });
     queue.dispatcher.on('finish', () => { // When the music is finish
         queue.songs.shift(); // Removing the first elements from queue(array)
         if (queue.songs[0]) { // Verifying if has song on queue
             message.delete();
             client.user.lastMessage.delete(); // Deleting the last message from bot
             playSong(client, message, queue.songs[0]); // Playing the first song from queue
-            client.user.setActivity(`${songTitle}`, { type: 'LISTENING' });
+            client.user.setActivity(`${queue.songs[0].title}`, { type: 'LISTENING' });
             const nowPlaying = new MessageEmbed()
                 .setAuthor('TOCANDO AGORA! 🔊', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
-                .setThumbnail(songThumb)
+                .setThumbnail(queue.songs[0].image)
                 .setColor('BLUE')
-                .addField('Link:', queue.songs[0]);
+                .addField('Nome:', queue.songs[0].title)
+                .addField('Duração:', queue.songs[0].duration, true)
+                .addField('Pedida por:', message.member, true)
+                .setFooter(`${queue.songs[0].views} visualizações | ${queue.songs[0].ago}`);
             return message.channel.send(nowPlaying);
         } else {
             client.user.lastMessage.delete();

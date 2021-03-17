@@ -1,6 +1,6 @@
 # A Discord bot for praticing JS on NODE
 
-<h2>Dependencies:<h2>
+## Dependencies:
 - @discordjs/opus
 - discord.js
 - ffmpeg

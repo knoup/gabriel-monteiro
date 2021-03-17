@@ -1,9 +1,3 @@
-/* eslint-disable no-inline-comments */
-/* eslint-disable no-unreachable */
-/* eslint-disable no-shadow */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
-/* eslint-disable no-inner-declarations */
 const { MessageEmbed, WebhookClient, DiscordAPIError, Discord, MessageCollector } = require('discord.js');
 const { search } = require('yt-search');
 const yts = require('yt-search');
@@ -111,7 +105,7 @@ const playSong = async (client, message, video) => {
             return message.channel.send(nowPlaying);
 
         } else {
-            client.user.lastMessage.delete(); // Deleting the last bot message
+            message.channel.bulkDelete(10); // Deleting the last message from bot
 
             message.member.voice.channel.leave(); // Leaving the voice channel
 

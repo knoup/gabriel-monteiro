@@ -1,9 +1,14 @@
 # A Discord bot for praticing JS on NODE
 
-Dependencies:
+<h2>Dependencies:<h2>
+- @discordjs/opus
+- discord.js
+- ffmpeg
+- yt-search
+- ytdl-core-discord
 
 
 
 
 
-Invite this bot to your Discord server: 
+Invite this bot to your Discord server by clicking [HERE](https://discord.com/api/oauth2/authorize?client_id=814941621951004672&permissions=8&scope=bot)

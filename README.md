@@ -1,9 +1,9 @@
 # Gabriel Monteiro BOT 🤖
-A Discord BOT made to pratice NODEjs.
+A Discord BOT made to practice NODEjs.
 
 ## How to run it? ▶
 
-### Install the Dependencies: 🔧
+### Install the dependencies: 🔧
 - discord.js
     - `npm install discord.js`
 - @discordjs/opus
@@ -15,10 +15,10 @@ A Discord BOT made to pratice NODEjs.
 - ytdl-core-discord
     - `ytdl-core-discord`
 
-### Download or Clone the repository 📦
+### Download or Clone the repository: 📦
 `git clone https://github.com/knoup/gabriel-monteiro.git`
 
-### Run the code 🚀
+### Run the code: 🚀
 - Go to folder 
     - `cd gabriel-monteiro`
 - Run 

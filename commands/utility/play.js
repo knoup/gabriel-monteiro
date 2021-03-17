@@ -32,7 +32,10 @@ const execute = async (client, message, args) => {
         if (queue) { // If a queue already exists
             queue.songs.push(video); // push the new typed song on the queue
             client.queues.set(message.guild.id, queue);
-            client.user.lastMessage.delete();
+            if (!client.user.lastMessage.embeds[0].title === 'TOCANDO AGORA! 🔊') {
+                client.user.lastMessage.delete();
+            }
+            message.delete();
             const songAdded = new MessageEmbed()
                 .setAuthor('MÚSICA ADICIONADA À FILA! ✅', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
                 .setThumbnail(video.image)
@@ -45,10 +48,12 @@ const execute = async (client, message, args) => {
         } else {
             try {
                 if (client.user.lastMessage) client.user.lastMessage.delete();
+                message.channel.bulkDelete(10);
                 playSong(client, message, video); // If not exists a queue, the playSong function is called
                 client.user.setActivity(`${video.title}`, { type: 'LISTENING' });
                 const messageBanner = new MessageEmbed()
-                    .setAuthor('TOCANDO AGORA! 🔊', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
+                    .setAuthor('', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
+                    .setTitle('TOCANDO AGORA! 🔊')
                     .setThumbnail(video.image)
                     .setColor('YELLOW')
                     .addField('Nome:', video.title)
@@ -80,12 +85,13 @@ const playSong = async (client, message, video) => {
     queue.dispatcher.on('finish', () => { // When the music is finish
         queue.songs.shift(); // Removing the first elements from queue(array)
         if (queue.songs[0]) { // Verifying if has song on queue
-            message.delete();
-            client.user.lastMessage.delete(); // Deleting the last message from bot
+            // message.delete();
+            message.channel.bulkDelete(10); // Deleting the last message from bot
             playSong(client, message, queue.songs[0]); // Playing the first song from queue
             client.user.setActivity(`${queue.songs[0].title}`, { type: 'LISTENING' });
             const nowPlaying = new MessageEmbed()
-                .setAuthor('TOCANDO AGORA! 🔊', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
+                .setAuthor('', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
+                .setTitle('TOCANDO AGORA! 🔊')
                 .setThumbnail(queue.songs[0].image)
                 .setColor('BLUE')
                 .addField('Nome:', queue.songs[0].title)
@@ -95,6 +101,7 @@ const playSong = async (client, message, video) => {
             return message.channel.send(nowPlaying);
         } else {
             client.user.lastMessage.delete();
+            console.log(client.user.lastMessage.embeds[0].title);
             message.member.voice.channel.leave();
             const nothingPlaying = new MessageEmbed()
                 .setAuthor('FILA VAZIA! 🔇', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')

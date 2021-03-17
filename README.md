@@ -1,5 +1,5 @@
 # Gabriel Monteiro BOT 🤖
-A Discord BOT made to pratic NODEjs.
+A Discord BOT made to pratice NODEjs.
 
 ## How to run it? ▶
 
@@ -19,8 +19,10 @@ A Discord BOT made to pratic NODEjs.
 `git clone https://github.com/knoup/gabriel-monteiro.git`
 
 ### Run the code 🚀
-Go to paste - `cd gabriel-monteiro`
-Run - `npm start`
+- Go to folder 
+    - `cd gabriel-monteiro`
+- Run 
+    - `npm start`
 
-### Wanna invite this Bot to your Discord server? 💡
-Just click [HERE](https://discord.com/api/oauth2/authorize?client_id=814941621951004672&permissions=8&scope=bot)
+### Do you want to invite this Bot to your Discord server? 💡
+Just click [HERE](https://discord.com/api/oauth2/authorize?client_id=814941621951004672&permissions=8&scope=bot).

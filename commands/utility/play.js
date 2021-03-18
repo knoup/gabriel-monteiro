@@ -2,7 +2,6 @@ const { MessageEmbed, WebhookClient, DiscordAPIError, Discord, MessageCollector 
 const { search } = require('yt-search');
 const yts = require('yt-search');
 const ytdl = require('ytdl-core-discord');
-let playing;
 const execute = async (client, message, args) => {
     try {
         // Verifying if the user is connected to a voice channel
@@ -47,7 +46,6 @@ const execute = async (client, message, args) => {
                 playSong(client, message, video); // If not exists a queue, the playSong function is called
 
                 client.user.setActivity(`${video.title}`, { type: 'LISTENING' }); // Setting the song name from status bot
-
                 const messageBanner = new MessageEmbed()
                     .setAuthor('', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuulkKdCSVtNZ60bIRYRuOqv2452Gpo1Qtxg&usqp=CAU')
                     .setTitle('TOCANDO AGORA! 🔊')
@@ -58,7 +56,6 @@ const execute = async (client, message, args) => {
                     .addField('Pedida por:', message.member, true)
                     .setFooter(`${video.views} visualizações | ${video.ago}`);
                 return message.channel.send(messageBanner);
-
             } catch {
                 console.log('error!');
             }
@@ -77,6 +74,7 @@ const playSong = async (client, message, video) => {
             connection: conn,
             dispatcher: null,
             songs: [video],
+            playing: true,
         };
     }
     queue.dispatcher = await queue.connection.play(await ytdl(video.url), { highWaterMark: 1 << 25, type: 'opus', filter: 'audioonly', quality: 'highestaudio' }); // Playing the song

@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const execute = (client, message) => {
-    const queue = client.queues.get(message.guild.id); // Create a instance queue
+    const queue = client.queues.get(message.guild.id); // Getting current queue
 
     if (!queue) return message.reply('não há nenhuma música sendo tocada!'); // Verify if a queue exist
 

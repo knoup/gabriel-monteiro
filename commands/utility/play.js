@@ -21,7 +21,7 @@ const execute = async (client, message, args) => {
             client.queues.set(message.guild.id, queue); // Using a queue from that server
 
             // Verifying if the last message has a title specific
-            if (!client.user.lastMessage.embeds[0].title === 'TOCANDO AGORA! 🔊') {
+            if (client.user.lastMessage.embeds[0].title !== 'TOCANDO AGORA! 🔊') {
                 client.user.lastMessage.delete();
             }
 

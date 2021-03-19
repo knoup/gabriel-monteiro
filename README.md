@@ -19,7 +19,7 @@ A Discord MusicBot made to practice NODEjs.
 `git clone https://github.com/knoup/gabriel-monteiro.git`
 
 ### Set your enviroment variables: 🔨
-- Create a file named `.env` e type into:
+- Create a file named `.env` and type into:
     - `BOT_TOKEN=<YOUR_BOT_TOKEN_HERE>` 
     - `PREFIX=<THE_COMMAND_PREFIX_HERE>`
 

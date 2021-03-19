@@ -1,5 +1,5 @@
 # Gabriel Monteiro BOT 🤖
-A Discord BOT made to practice NODEjs.
+A Discord MusicBot made to practice NODEjs.
 
 ## How to run it? ▶
 
@@ -17,6 +17,13 @@ A Discord BOT made to practice NODEjs.
 
 ### Download or Clone the repository: 📦
 `git clone https://github.com/knoup/gabriel-monteiro.git`
+
+### Set your enviroment variables: 🔨
+Create a file named `.env` e type into:
+    - `BOT_TOKEN=<YOUR_BOT_TOKEN_HERE>` 
+    - `PREFIX=<THE_COMMAND_PREFIX_HERE>`
+
+***Obs: You can get your bot token by creating a discord app at https://discord.com/developers/applications *** 
 
 ### Run the code: 🚀
 - Go to folder 

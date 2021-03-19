@@ -32,7 +32,7 @@ const execute = async (client, message, args) => {
                 .setThumbnail(video.image)
                 .setColor('GREEN')
                 .addField('Nome:', video.title)
-                .addField('Duração:', video.duration, true)
+                .addField('Duração:', video.timestamp, true)
                 .addField('Pedida por:', message.member, true)
                 .setFooter(`${video.views} visualizações | ${video.ago}`);
             return message.channel.send(songAdded);
@@ -52,7 +52,7 @@ const execute = async (client, message, args) => {
                     .setThumbnail(video.image)
                     .setColor('YELLOW')
                     .addField('Nome:', video.title)
-                    .addField('Duração:', video.duration, true)
+                    .addField('Duração:', video.timestamp, true)
                     .addField('Pedida por:', message.member, true)
                     .setFooter(`${video.views} visualizações | ${video.ago}`);
                 return message.channel.send(messageBanner);
@@ -97,7 +97,7 @@ const playSong = async (client, message, video) => {
                 .setThumbnail(queue.songs[0].image)
                 .setColor('BLUE')
                 .addField('Nome:', queue.songs[0].title)
-                .addField('Duração:', queue.songs[0].duration, true)
+                .addField('Duração:', queue.songs[0].timestamp, true)
                 .addField('Pedida por:', message.member, true)
                 .setFooter(`${queue.songs[0].views} visualizações | ${queue.songs[0].ago}`);
             return message.channel.send(nowPlaying);

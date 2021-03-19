@@ -1,4 +1,3 @@
-/* eslint-disable no-inline-comments */
 const playSong = require('./play.js').playSong;
 const { MessageEmbed } = require('discord.js');
 
@@ -12,12 +11,14 @@ const execute = async (client, message) => {
         if (!queue) return message.reply('Nenhuma música está tocando.'); // Verifying if a song is playing
 
         queue.songs.shift(); // Removing the first elements from queue(array)
+
         if (queue.songs[0]) {
             const skiped = new MessageEmbed()
                 .setTitle('MÚSICA SKIPADA! ⏩')
                 .setColor('RED')
                 .setDescription(`Por: ${message.member}`);
-            message.channel.send(skiped);
+
+            message.channel.send(skiped); // Skiping the current song
 
             message.channel.bulkDelete(10); // Deleting the last 10 messages from channel
 

@@ -1,5 +1,4 @@
-const { MessageEmbed, WebhookClient, DiscordAPIError, Discord, MessageCollector } = require('discord.js');
-const { search } = require('yt-search');
+const { MessageEmbed } = require('discord.js');
 const yts = require('yt-search');
 const ytdl = require('ytdl-core-discord');
 const execute = async (client, message, args) => {
@@ -9,10 +8,11 @@ const execute = async (client, message, args) => {
 
         // Searching for URL on YouTube
         const songRequested = args.join(' '); // Taking the song's name/URL from command
-        // let songUrl; // Creating a variable to receive the song's URL
+
         const result = await yts(songRequested); // Searching for the song's name/URL
         const videos = result.videos.slice(0, 1); // Taking only the first video from response and adding into a array
         const video = videos[0];
+
         const queue = client.queues.get(message.guild.id);
 
         // If a queue already exists
@@ -39,9 +39,7 @@ const execute = async (client, message, args) => {
 
         } else {
             try {
-                if (client.user.lastMessage) client.user.lastMessage.delete(); // Verifying if the client sent a message before that session
-
-                message.channel.bulkDelete(10); // Deleting the last 10 messages to cluan up the channel
+                message.channel.bulkDelete(10); // Deleting the last 10 messages to clean up the channel
 
                 playSong(client, message, video); // If not exists a queue, the playSong function is called
 

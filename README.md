@@ -31,5 +31,8 @@ A Discord MusicBot made to practice NODEjs.
 - Run 
     - `npm start`
 
+### Done?  🎉
+Now type `!help` in a channel to see all commands!
+
 ### Do you want to invite this Bot to your Discord server? 💡
 Just click [HERE](https://discord.com/api/oauth2/authorize?client_id=814941621951004672&permissions=8&scope=bot).

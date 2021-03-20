@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 
-const execute = (message) => {
+const execute = (client, message) => {
     const help = new MessageEmbed()
         .setTitle('LISTA DE COMANDOS: 📄')
         .addField('`!play`', 'Digite `!play` seguido de um link ou nome da música que você quer colocar para tocar.')
